@@ -1,17 +1,31 @@
 #!/bin/bash
-#Ruby builder
-cd $3
-rm -r *
-rm -r .*
-cd ..
-git clone $4 current
-chown -R deploy:deploy current
-cd current
-chown -R deploy:deploy *
-bundle update
-rake assets:clean RAILS_ENV=production
-rake tmp:clear RAILS_ENV=production
-rake assets:precompile RAILS_ENV=production
-chown -R deploy:deploy tmp
-stop unicorn_$2
-start unicorn_$2
+#Java builder WAR
+
+filename=$(basename "$4")
+extension="${filename##*.}"
+filename="${filename%.*}"
+
+case "$extension" in
+
+war)  cd $3
+      rm *.war
+      rm -r $2
+      wget $4
+      chown -R sandbox:sandbox *.war
+      ;;
+git)  cd $3
+      rm *.war
+      cd /home/sandbox/
+      rm -r $filename
+      git clone $4
+      cd $filename
+      mvn clean
+      mvn package
+      cp target/*.war $3
+      chown -R sandbox:sandbox $3/*.war
+      ;;
+esac
+
+stop tomcat
+start tomcat
+
