@@ -3,6 +3,23 @@
 
 #megam_java_builder/build tomcat project=orion local_repo=/home/sandbox/tomcat/webaps remote_repo=https://github.com/thomasalrin/orion.git
 
+
+for i in "$@"
+do
+case $i in
+    project=*)
+    project="${i#*=}"
+
+    ;;
+    local_repo=*)
+    local_repo="${i#*=}"
+    ;;
+    remote_repo=*)
+    remote_repo="${i#*=}"
+    ;;
+esac
+done
+
 filename=$(basename "$remote_repo")
 extension="${filename##*.}"
 filename="${filename%.*}"
