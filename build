@@ -1,7 +1,7 @@
 #!/bin/bash
 #Java builder WAR
 
-#megam_java_builder/build tomcat project=orion local_repo=/home/sandbox/tomcat/webaps remote_repo=https://github.com/thomasalrin/orion.git
+#megam_java_builder/build tomcat project=orion local_repo=/home/megam/tomcat/webaps remote_repo=https://github.com/thomasalrin/orion.git
 
 
 for i in "$@"
@@ -30,21 +30,21 @@ war)  cd $local_repo
       rm *.war
       rm -r $project
       wget $remote_repo
-      chown -R sandbox:sandbox *.war
+      chown -R megam:megam *.war
       ;;
 git)  cd $local_repo
       rm *.war
-      cd /home/sandbox/
+      cd /home/megam/
       rm -r $filename
       git clone $remote_repo
       cd $filename
       mvn clean
       mvn package
       cp target/*.war $local_repo
-      chown -R sandbox:sandbox $local_repo/*.war
+      chown -R megam:megam $local_repo/*.war
       ;;
 esac
 
-stop tomcat
-start tomcat
+stop java
+start java
 
